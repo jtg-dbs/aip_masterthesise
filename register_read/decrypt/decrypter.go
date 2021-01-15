@@ -20,5 +20,10 @@ func Decrypt(key []byte) []byte {
 
 // IpSecDll will unprotect a []byte with the ipsecproc.dll of windows OS
 func IpSecProcDll() {
-	decrypter, err := windows.LoadDLL("ipsecproc.dll")
+	log.SetFlags(0)
+	log.SetPrefix("decrypter: ")
+	_, err := windows.LoadDLL("ipsecproc.dll")
+	if err != nil {
+		log.Fatal(err)
+	}
 }
