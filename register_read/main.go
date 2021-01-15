@@ -1,9 +1,9 @@
 package main
 
 import (
-	"fmt"
 	"log"
-	"registerread/read"
+	decrypter "registryread/decrypt"
+	"registryread/read"
 )
 
 func main() {
@@ -12,6 +12,6 @@ func main() {
 	log.SetPrefix("main: ")
 
 	log.Print("Sucesfully read MK and SK from registry")
-	fmt.Printf("SK value is: \n %X \n", msippSkBin)
-	fmt.Printf("MK value is: \n %X \n", msippMkBin)
+	decrypter.Decrypt(msippMkBin)
+	decrypter.Decrypt(msippSkBin)
 }

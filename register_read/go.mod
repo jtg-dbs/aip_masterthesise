@@ -1,4 +1,4 @@
-module registerread
+module registryread
 
 go 1.15
 
