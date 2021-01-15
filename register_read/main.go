@@ -17,6 +17,6 @@ func main() {
 	SkBinDec := decrypter.Decrypt(msippSkBin)
 
 	log.Print("Sucesfully decrpyted with DPAPI")
-	fmt.Printf("%X", MkBinDec)
-	fmt.Printf("%X", SkBinDec)
+	fmt.Printf("MK Value: \n %X \n", MkBinDec)
+	fmt.Printf("Sk Value \n %X \n", SkBinDec)
 }
