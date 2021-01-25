@@ -19,4 +19,6 @@ func main() {
 	log.Print("Sucesfully decrpyted with DPAPI")
 	fmt.Printf("MK Value: \n %X \n", MkBinDec)
 	fmt.Printf("Sk Value \n %X \n", SkBinDec)
+
+	decrypter.IpSecProcDll(SkBinDec)
 }

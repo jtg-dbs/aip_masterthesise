@@ -1,3 +1,3 @@
 export GOOS=windows
-export GOARCH=amd64
+export GOARCH=386
 go build
