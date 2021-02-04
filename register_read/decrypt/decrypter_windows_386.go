@@ -1,10 +1,9 @@
 package decrypter
 
+//#include "decrypt.h"
+import "C"
 import (
-	"fmt"
 	"log"
-	"syscall"
-	"unsafe"
 
 	"github.com/billgraziano/dpapi"
 )
@@ -24,33 +23,8 @@ func Decrypt(key []byte) []byte {
 func IpSecProcDll(key []byte) {
 	log.SetFlags(0)
 	log.SetPrefix("decrypter: ")
-
-	// Depend the Headers of the sk-unproteted
-	skBinProtected := key[4:]
-
-	// Load DLL and make iit usable
-	ipcSecProcDll := syscall.NewLazyDLL(`C:\Users\eve.aip\ipcsecproc.dll`)
-	err := ipcSecProcDll.Load()
-	if err != nil {
-		fmt.Print("Load funktion")
-		log.Fatal(err)
-	}
-	proc := ipcSecProcDll.NewProc("IpcSPEncrypt")
-
-	skPointer := unsafe.Alignof(skBinProtected)
-
-	ret, _, err := proc.Call(uintptr(skPointer))
-	if err != nil {
-		fmt.Printf("%X", ret)
-		fmt.Print("fehlermeldung")
-		log.Fatal(err)
-	}
-
-	fmt.Print(ret)
-
-	// // Loading de ipcsecproc.dll for deobfuscating the skBinProtected
-	// ipcSecProcDll, err := windows.LoadDLL("ipsecproc.dll")
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
+	C.CppDecrypterInit()
 }
+
+// IpcSPGetBoundRightKey
+//
