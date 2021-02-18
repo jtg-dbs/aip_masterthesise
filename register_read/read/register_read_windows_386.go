@@ -1,7 +1,7 @@
 package read
 
 import (
-	"log"
+	error_log "registryread/error"
 
 	"golang.org/x/sys/windows/registry"
 )
@@ -11,27 +11,19 @@ import (
 
 // OpenMkSk extracts the mk and sk value for a specific user and returns an error if needed
 func OpenMkSK() ([]byte, []byte) {
-	log.SetFlags(0)
-	log.SetPrefix("open_mk_sk: ")
-
 	// Open registry Key
 	msippKey, err := registry.OpenKey(registry.CURRENT_USER, `Software\Classes\Local Settings\Software\Microsoft\MSIPC`, registry.QUERY_VALUE)
 	if err != nil {
-		log.Fatal(err)
+		error_log.Check(err, "cant open registry", "open_mk_sk")
 		msippKey.Close()
 	}
 
 	// Read MSIPP-MK Value from Registry Key
 	msippMkBin, _, err := msippKey.GetBinaryValue("MSIPP-MK")
-	if err != nil {
-		log.Fatal(err)
-	}
+	error_log.Check(err, "cant read MK Value", "open_mk_sk")
 
 	//read MSIPP-SK Value from Registry Key
 	msippSkBin, _, err := msippKey.GetBinaryValue("MSIPP-SK")
-	if err != nil {
-		log.Fatal(err)
-	}
+	error_log.Check(err, "cant read SK Value", "open_mk_sk")
 	return msippSkBin, msippMkBin
-
 }
