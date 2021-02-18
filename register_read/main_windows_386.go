@@ -1,9 +1,9 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	decrypter "registryread/decrypt"
+	"registryread/output"
 	"registryread/read"
 )
 
@@ -17,8 +17,7 @@ func main() {
 	SkBinDec := decrypter.Decrypt(msippSkBin)
 
 	log.Print("Sucesfully decrpyted with DPAPI")
-	fmt.Printf("MK Value: \n %X \n", MkBinDec)
-	fmt.Printf("Sk Value \n %X \n", SkBinDec)
+	sk := decrypter.IpSecProcDll(SkBinDec)
 
-	decrypter.IpSecProcDll(SkBinDec)
+	output.Export(sk, MkBinDec)
 }
