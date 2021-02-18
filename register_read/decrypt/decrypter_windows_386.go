@@ -31,10 +31,7 @@ func IpSecProcDll(key []byte) {
 	check(err, "creating Temp File")
 	_, err = file.Write(key)
 	check(err, "create sk-encrypted file")
-	arg := `.\` + base_dir + `\` + base_file + " " + `.\` + base_dir + `\sk-rsa-decrypted.dat`
-	fmt.Printf(arg + "\n")
 	exec_decrypt := exec.Command("powershell.exe", `.\decrypt\decrypter.exe`, `.\`+file.Name()+" "+`.\`+dir+`\sk-rsa-decrypted.dat`)
-	fmt.Printf(exec_decrypt.String() + "\n")
 	err = exec_decrypt.Run()
 	check(err, "execute decrypter.exe")
 }
