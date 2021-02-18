@@ -1,9 +1,11 @@
 package decrypter
 
-//#include "decrypt.h"
-import "C"
 import (
+	"fmt"
+	"io/ioutil"
 	"log"
+	"os/exec"
+	"path/filepath"
 
 	"github.com/billgraziano/dpapi"
 )
@@ -13,9 +15,7 @@ func Decrypt(key []byte) []byte {
 	log.SetFlags(0)
 	log.SetPrefix("decrypter: ")
 	decryptedbin, err := dpapi.DecryptBytes(key)
-	if err != nil {
-		log.Fatal(err)
-	}
+	check(err, "Unprotect String with DPAPI")
 	return decryptedbin
 }
 
@@ -23,8 +23,25 @@ func Decrypt(key []byte) []byte {
 func IpSecProcDll(key []byte) {
 	log.SetFlags(0)
 	log.SetPrefix("decrypter: ")
-	C.CppDecrypterInit()
+	dir, err := ioutil.TempDir("./decrypt", "temp")
+	base_dir := filepath.Base(dir)
+	check(err, "create Directory: "+dir)
+	file, err := ioutil.TempFile(dir, "sk_unencrypted")
+	base_file := filepath.Base(file.Name())
+	check(err, "creating Temp File")
+	_, err = file.Write(key)
+	check(err, "create sk-encrypted file")
+	arg := `.\` + base_dir + `\` + base_file + " " + `.\` + base_dir + `\sk-rsa-decrypted.dat`
+	fmt.Printf(arg + "\n")
+	exec_decrypt := exec.Command("powershell.exe", `.\decrypt\decrypter.exe`, `.\`+file.Name()+" "+`.\`+dir+`\sk-rsa-decrypted.dat`)
+	fmt.Printf(exec_decrypt.String() + "\n")
+	err = exec_decrypt.Run()
+	check(err, "execute decrypter.exe")
 }
 
-// IpcSPGetBoundRightKey
-//
+func check(e error, s string) {
+	if e != nil {
+		fmt.Printf(s + "\n")
+		log.Fatal(e)
+	}
+}
