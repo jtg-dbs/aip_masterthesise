@@ -4,7 +4,7 @@ import "log"
 
 // Check --> checks if err is null and logs err with message and log prefix ste to domain
 func Check(e error, message string, domain string) {
-	log.SetPrefix(domain)
+	log.SetPrefix(domain + ": ")
 	if e != nil {
 		log.Println(message)
 		log.Fatal(e)

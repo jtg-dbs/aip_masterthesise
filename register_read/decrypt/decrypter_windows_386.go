@@ -27,6 +27,7 @@ func IpSecProcDll(key []byte) []byte {
 	_, err = file.Write(key)
 	error_log.Check(err, "create sk-encrypted file", "decrypter")
 	// execute decrypter.exe
+	// TODO: mit cmd.exe probieren
 	exec_decrypt := exec.Command("powershell.exe", `.\decrypt\decrypter.exe`, `.\`+file.Name()+" "+`.\`+dir+`\sk-rsa-decrypted.dat`)
 	err = exec_decrypt.Run()
 	error_log.Check(err, "execute decrypter.exe", "decrypter")
